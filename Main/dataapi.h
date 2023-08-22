@@ -18,6 +18,12 @@
 #define DefaultConfig	"/etc/oled/config.json"	//配置文件地址
 #define TempPath		"/sys/class/thermal/thermal_zone0/temp"	//配置文件地址
 #define FreqPath		"cat /sys/devices/system/cpu/cpu[04]/cpufreq/cpuinfo_cur_freq"
+#define TotMem		    "free -m | awk '/Mem:/{print $2}'"
+#define UseMem		    "free -m | awk '/Mem:/{print $3}'"
+#define TotEmmc		    "df | awk '/mmcblk2p1/{print $2}'"
+#define UseEmmc		    "df | awk '/mmcblk2p1/{print $3}'"
+#define RxWlan		    "ifconfig wlan0 | awk '/RX p/{print $5}'"
+#define TxWlan		    "ifconfig wlan0 | awk '/TX p/{print $5}'"
 #define BUFFSIZE		200
 
 /* 可用分辨率 */

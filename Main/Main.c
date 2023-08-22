@@ -298,6 +298,16 @@ void pageDisplay(pageData *pagedata)
 							print_strln(buffer);
 						break;
 						case 1:
+							time( &rawtime );    //时间
+							p = getJsonStr(dispjson,"class");
+							if(p == NULL) strftime(buffer, BUFFSIZE, "%H:%M:%S", localtime(&rawtime));
+							else strftime(buffer, BUFFSIZE, p, localtime(&rawtime));
+							setTextSize(getJsonNumInt(dispjson,"size"));
+							setTextColor(getJsonNumInt(dispjson,"color"));
+							setCursor(getJsonNumInt(dispjson,"x0"),getJsonNumInt(dispjson,"y0"));
+							print_strln(buffer);
+						break;
+						case 2:
 							if(readFile( buffer, TempPath,5) == 0) break;
 							setTextSize(getJsonNumInt(dispjson,"size"));
 							setTextColor(getJsonNumInt(dispjson,"color"));
@@ -307,7 +317,7 @@ void pageDisplay(pageData *pagedata)
 							buffer[getJsonNumInt(dispjson,"base")] = '\0';
 							print_str(buffer);
 						break;
-						case 2:
+						case 3:
 							getShell(buffer,FreqPath,5);
 							setTextSize(getJsonNumInt(dispjson,"size"));
 							setTextColor(getJsonNumInt(dispjson,"color"));
@@ -320,9 +330,9 @@ void pageDisplay(pageData *pagedata)
 							buffer[getJsonNumInt(dispjson,"base")] = '\0';
 							print_str(buffer);
 						break;
-						case 3:
+						case 4:                    //IP地址
 							sprintf(cmd, \
-							"ifconfig %s|grep 'inet addr:'|cut -d: -f2|awk '{print $1}'", \
+							"ifconfig %s|awk -F '[ :]+' 'NR==2 {print $3}'", \
 							getJsonStr(dispjson,"port"));
 							getShell(buffer,cmd,16);
 							setTextSize(getJsonNumInt(dispjson,"size"));
@@ -331,6 +341,85 @@ void pageDisplay(pageData *pagedata)
 							buffer[getJsonNumInt(dispjson,"base")] = '\0';
 							print_str(buffer);
 						break;
+						case 5:                    //总内存
+							getShell(buffer,TotMem,5);
+							setTextSize(getJsonNumInt(dispjson,"size"));
+							setTextColor(getJsonNumInt(dispjson,"color"));
+							setCursor(getJsonNumInt(dispjson,"x0"),getJsonNumInt(dispjson,"y0"));
+							if(getJsonNumInt(dispjson,"class"))
+							{
+								temp = atol(buffer);
+								sprintf(buffer,"%f",(float)temp/1024);
+							}
+							buffer[getJsonNumInt(dispjson,"base")] = '\0';
+							print_str(buffer);
+						break;
+						case 6:                    //使用内存
+							getShell(buffer,UseMem,5);
+							setTextSize(getJsonNumInt(dispjson,"size"));
+							setTextColor(getJsonNumInt(dispjson,"color"));
+							setCursor(getJsonNumInt(dispjson,"x0"),getJsonNumInt(dispjson,"y0"));
+							if(getJsonNumInt(dispjson,"class"))
+							{
+								temp = atol(buffer);
+								sprintf(buffer,"%f",(float)temp/1024);
+							}
+							buffer[getJsonNumInt(dispjson,"base")] = '\0';
+							print_str(buffer);
+						break;
+						case 7:                    //总EMMC
+							getShell(buffer,TotEmmc,5);
+							setTextSize(getJsonNumInt(dispjson,"size"));
+							setTextColor(getJsonNumInt(dispjson,"color"));
+							setCursor(getJsonNumInt(dispjson,"x0"),getJsonNumInt(dispjson,"y0"));
+							if(getJsonNumInt(dispjson,"class"))
+							{
+								temp = atol(buffer);
+								sprintf(buffer,"%f",(float)temp/1024);
+							}
+							buffer[getJsonNumInt(dispjson,"base")] = '\0';
+							print_str(buffer);
+						break;
+						case 8:                    //己用EMMC
+							getShell(buffer,UseEmmc,5);
+							setTextSize(getJsonNumInt(dispjson,"size"));
+							setTextColor(getJsonNumInt(dispjson,"color"));
+							setCursor(getJsonNumInt(dispjson,"x0"),getJsonNumInt(dispjson,"y0"));
+							if(getJsonNumInt(dispjson,"class"))
+							{
+								temp = atol(buffer);
+								sprintf(buffer,"%f",(float)temp/1024);
+							}
+							buffer[getJsonNumInt(dispjson,"base")] = '\0';
+							print_str(buffer);
+						break;
+						case 9:                    //RX网卡
+							getShell(buffer,RxWlan,5);
+							setTextSize(getJsonNumInt(dispjson,"size"));
+							setTextColor(getJsonNumInt(dispjson,"color"));
+							setCursor(getJsonNumInt(dispjson,"x0"),getJsonNumInt(dispjson,"y0"));
+							if(getJsonNumInt(dispjson,"class"))
+							{
+								temp = atol(buffer);
+								sprintf(buffer,"%f",(float)temp/10);
+							}
+							buffer[getJsonNumInt(dispjson,"base")] = '\0';
+							print_str(buffer);
+						break;
+						case 10:                    //TX网卡
+							getShell(buffer,TxWlan,5);
+							setTextSize(getJsonNumInt(dispjson,"size"));
+							setTextColor(getJsonNumInt(dispjson,"color"));
+							setCursor(getJsonNumInt(dispjson,"x0"),getJsonNumInt(dispjson,"y0"));
+							if(getJsonNumInt(dispjson,"class"))
+							{
+								temp = atol(buffer);
+								sprintf(buffer,"%f",(float)temp/10);
+							}
+							buffer[getJsonNumInt(dispjson,"base")] = '\0';
+							print_str(buffer);
+						break;
+
 						default:
 						break;
 					}
